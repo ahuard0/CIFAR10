@@ -2,7 +2,7 @@
 r"""
 Created on Mon Sep  6 19:55:13 2021
 
-CIFAR 10 Dataset Implementation, Built from Scratch
+CIFAR-10 Dataset Implementation, Built from Scratch
     CIFAR10 dataset downloaded locally to A:\CIFAR\cifar-10-batches-py\
     from https://www.cs.toronto.edu/~kriz/cifar-10-python.tar.gz
     Dataset created by Alex Krizhevsky, Vinod Nair, and Geoffrey Hinton
@@ -19,7 +19,7 @@ from torch.utils.data import Dataset
 from torchvision import transforms
 
 
-class Dataset10(Dataset):
+class CIFAR10(Dataset):
     """
     The CIFAR-10 dataset
     https://www.cs.toronto.edu/~kriz/cifar.html
@@ -241,7 +241,7 @@ def printMetaInfo(dataset):
 
     Parameters
     ----------
-    dataset : Dataset10 Class object
+    dataset : CIFAR10 Class object
         Dataset with meta information to be printed to the console.
 
     Returns
@@ -263,7 +263,7 @@ def printDatasetInfo(dataset, verbose=False):
 
     Parameters
     ----------
-    dataset : Dataset10 Class object
+    dataset : CIFAR10 Class object
         Dataset with content information to be printed to the console.
         
     verbose : bool
@@ -318,7 +318,7 @@ def printDatasetInfo(dataset, verbose=False):
 
 def main():
     """
-    Main method used for testing the Dataset10 class. This function is used
+    Main method used for testing the CIFAR10 class. This function is used
     for testing purposes and to provide very basic examples of how to access
     data within the CIFAR-10 dataset.
 
@@ -330,8 +330,8 @@ def main():
     print("Begin Testing Main")
     
     print("\nInitialize Dataset Class")
-    dataset_train = Dataset10(bool_train=True, bool_tensor=True)
-    dataset_val = Dataset10(bool_train=False)
+    dataset_train = CIFAR10(bool_train=True, bool_tensor=True)
+    dataset_val = CIFAR10(bool_train=False)
     
     printMetaInfo(dataset_train)
     
