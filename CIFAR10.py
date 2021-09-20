@@ -23,11 +23,11 @@ class CIFAR10(Dataset):
     """
     The CIFAR-10 dataset
     https://www.cs.toronto.edu/~kriz/cifar.html
-    
+
     The CIFAR-10 dataset consists of 60000 32x32 colour images in 10 classes,
     with 6000 images per class. There are 50000 training images and 10000 test
     images.
-    
+
     The dataset is divided into five training batches and one test batch, each
     with 10000 images. The test batch contains exactly 1000 randomly-selected
     images from each class. The training batches contain the remaining images
@@ -38,18 +38,18 @@ class CIFAR10(Dataset):
     Instructions:
         Run this script directly to print debug information to the console.
         This PyTorch Dataset is compatible with PyTorch DataLoader.
-        
+
     Note:
         The parent class requires overriding __getitem__() and __len__().
         These methods are the minimum required interfaces required by PyTorch
         Datasets.  PyTorch DataLoader will call both functions as they traverse
         the dataset.
     """
-    
+
     def __init__(self, bool_train=False, bool_tensor=False):
         """
         Initialization function for the dataset.
-        
+
         Parameters
         ----------
         bool_train : TYPE, optional
@@ -68,7 +68,7 @@ class CIFAR10(Dataset):
         self.TRAIN_BOOL = bool_train
         self.PATH = r'A:\CIFAR\cifar-10-batches-py'
         self.bool_tensor = bool_tensor
-        
+
         # Initialize Archives
         self.dict_batch_meta = self.unpickle(self.PATH+r"\batches.meta")
         if bool_train:
@@ -79,18 +79,18 @@ class CIFAR10(Dataset):
             self.dict_batch_5 = self.unpickle(self.PATH+r"\data_batch_5")
         else:
             self.dict_batch_test = self.unpickle(self.PATH+r"\test_batch")
-        
+
         # Generate Meta
         self.label_dict = dict()
         labels = self.getMetaLabelsList()
         for idx, val in enumerate(labels):
             self.label_dict[idx] = val
-        
+
     def __len__(self):
         """
         A required method by PyTorch Datasets, which is used to interface
         with a PyTorch DataLoader.
-        
+
         Usage:
             length = len(dataset)
 
@@ -109,12 +109,12 @@ class CIFAR10(Dataset):
         else:
             count = len(self.dict_batch_test[b'data'])
         return count
-        
+
     def __getitem__(self, ndx):
         """
         A required method by PyTorch Datasets, which is used to interface
         with PyTorch Dataloader.
-        
+
         Usage:
             img, labelID = dataset[ndx]
 
@@ -149,30 +149,30 @@ class CIFAR10(Dataset):
         else:
             archive = self.dict_batch_test
             idx = ndx
-            
+
         imgArray = archive[b'data'][idx]
         labelID = archive[b'labels'][idx]
-        
+
         # Image is 3x32x32
         arrayRGB = np.zeros((32, 32, 3), dtype=np.uint8)
         arrayRGB[:, :, 0] = imgArray[:1024].reshape((32, 32))
         arrayRGB[:, :, 1] = imgArray[1024:1024*2].reshape((32, 32))
         arrayRGB[:, :, 2] = imgArray[1024*2:].reshape((32, 32))
         pil_image = Image.fromarray(arrayRGB, mode='RGB')
-        
+
         # Apply Transform
         if self.bool_tensor:
             output = transforms.ToTensor()(pil_image)
         else:
             output = pil_image
-            
+
         return output, labelID
 
     def getMetaLabelsList(self):
         """
         Label list provided by the dataset author in the meta file.
         This function is used to test and verify the dataset's integrity.
-        
+
         Returns
         -------
         output : list
@@ -180,7 +180,7 @@ class CIFAR10(Dataset):
             ID values from 0-9.
         """
         return self.dict_batch_meta[b'label_names']
-    
+
     def getMetaLabelsCount(self):
         """
         Helper function to provide the number of labels, which is always 10.
@@ -193,7 +193,7 @@ class CIFAR10(Dataset):
 
         """
         return len(self.label_dict)
-    
+
     def getMetaLabel(self, idx):
         """
         Returns the string label corresponding to an integer label ID.
@@ -210,7 +210,7 @@ class CIFAR10(Dataset):
 
         """
         return self.label_dict[idx].decode("utf-8")
-        
+
     def unpickle(self, file):
         """
         Returns a dictionary containing the contents of a Pickled archive.
